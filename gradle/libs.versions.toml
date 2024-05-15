@@ -2,6 +2,8 @@
 agp = "8.4.0"
 annotation = "1.8.0"
 cameraView = "1.3.3"
+circleimageview = "3.1.0"
+coreSplashscreen = "1.0.1"
 converterGson = "2.10.0"
 coreTesting = "2.2.0"
 datastorePreferences = "1.1.1"
@@ -34,10 +36,12 @@ runner = "1.5.2"
 swiperefreshlayout = "1.1.0"
 coreKtxVersion = "1.5.0"
 monitor = "1.6.1"
+shimmer = "0.5.0"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
 
 [libraries]
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraView" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraView" }
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraView" }
 androidx-core = { module = "androidx.test:core", version.ref = "coreKtxVersion" }
@@ -61,6 +65,8 @@ androidx-rules = { module = "androidx.test:rules", version.ref = "coreKtxVersion
 androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
+shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
