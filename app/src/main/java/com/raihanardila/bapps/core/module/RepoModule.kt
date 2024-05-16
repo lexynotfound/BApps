@@ -1,4 +1,6 @@
 package com.raihanardila.bapps.core.module
 
-class RepoModule {
+import org.koin.dsl.module
+
+val repoModule = module {
 }
