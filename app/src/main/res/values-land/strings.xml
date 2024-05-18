@@ -32,4 +32,19 @@
     <string name="error_name_required">Name is required</string>
     <string name="error_email_required">Email is required</string>
     <string name="error_password_required">Password is required</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="back">Back</string>
+    <string name="more_options">More Option</string>
+    <string name="add_image">Add Image</string>
+    <string name="add_gif">Add Gif</string>
+    <string name="add_poll">Add Poll</string>
+    <string name="add_location">Add Location</string>
+    <string name="more_actions">More Action</string>
+    <string name="your_followers_can_reply_amp_quote"><![CDATA[Your followers can reply & quote]]></string>
+    <string name="post">Post</string>
+    <string name="new_thread">New thread</string>
+    <string name="raiiardiann">raiiardiann</string>
+    <string name="what_s_new">What\'s new?</string>
+    <string name="whats_new">What\'s new?</string>
+    <string name="preview_image">Preview Image</string>
 </resources>
