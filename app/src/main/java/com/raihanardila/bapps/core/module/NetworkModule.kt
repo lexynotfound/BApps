@@ -6,6 +6,7 @@ import com.raihanardila.bapps.core.data.local.prefrences.AuthPreferences
 import com.raihanardila.bapps.core.data.remote.client.ApiService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,8 +25,7 @@ val networkModule = module {
             } else {
                 // Token null atau kosong, lakukan penanganan di sini
                 println("Error: Token is null or empty")
-                Log.e("AuthInterceptor ", "Error: Token is null or empty $token")
-                // Misalnya, tampilkan pesan kesalahan atau lakukan tindakan yang sesuai
+                Log.e("AuthInterceptor", "Error: Token is null or empty $token")
                 chain.request() // Lanjutkan permintaan tanpa token
             }
             chain.proceed(request)
@@ -33,8 +33,13 @@ val networkModule = module {
     }
 
     single {
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
         OkHttpClient.Builder()
             .addInterceptor(get<Interceptor>())
+            .addInterceptor(loggingInterceptor)
             .build()
     }
 

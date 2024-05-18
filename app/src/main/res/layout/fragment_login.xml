@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".ui.auth.LoginActivity">
+    tools:context=".ui.auth.LoginFragment">
 
     <!-- Language Text -->
     <TextView
@@ -25,14 +25,14 @@
         android:id="@+id/logo_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:contentDescription="@string/Logo"
         android:src="@drawable/iconoir_app_notification_solid"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintVertical_bias="0.3" />
 
     <!-- Custom Email Input Layout -->
     <com.raihanardila.bapps.ui.customeview.EmailCustomeView
@@ -86,6 +86,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
         android:backgroundTint="@color/black"
+        android:textColor="@color/white"
         android:padding="12dp"
         android:text="@string/create_new_account"
         android:textSize="16sp"

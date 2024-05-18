@@ -8,7 +8,10 @@ import com.raihanardila.bapps.core.data.local.repository.AuthRepository
 import com.raihanardila.bapps.core.data.model.AuthModel
 import com.raihanardila.bapps.core.data.remote.response.auth.LoginResponse
 import com.raihanardila.bapps.core.data.remote.response.auth.RegisterResponse
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 class AuthViewModel(
@@ -29,30 +32,46 @@ class AuthViewModel(
 
     fun loginUser(email: String, password: String) {
         _isLoading.value = true
-        val authModel = AuthModel(email = email, password = password) // `name` is null for login
-        viewModelScope.launch {
-            val response: Response<LoginResponse> = authRepository.login(authModel)
-            _isLoading.value = false
-            if (response.isSuccessful && response.body()?.error == false) {
-                _authToken.value = response.body()?.authResult?.token
-                _loginSuccess.value = true
-            } else {
+        val authModel = AuthModel(email = email, password = password)
+        val call = authRepository.login(authModel)
+
+        call.enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                _isLoading.value = false
+                if (response.isSuccessful && response.body()?.error == false) {
+                    _authToken.value = response.body()?.authResult?.token
+                    _loginSuccess.value = true
+                } else {
+                    _loginSuccess.value = false
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                _isLoading.value = false
                 _loginSuccess.value = false
             }
-        }
+        })
     }
 
     fun registerUser(name: String, email: String, password: String) {
         _isLoading.value = true
         val authModel = AuthModel(name = name, email = email, password = password)
-        viewModelScope.launch {
-            val response: Response<RegisterResponse> = authRepository.register(authModel)
-            _isLoading.value = false
-            if (response.isSuccessful && response.body()?.error == false) {
-                _registerSuccess.value = true
-            } else {
+        val call = authRepository.register(authModel)
+
+        call.enqueue(object : Callback<RegisterResponse> {
+            override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                _isLoading.value = false
+                if (response.isSuccessful && response.body()?.error == false) {
+                    _registerSuccess.value = true
+                } else {
+                    _registerSuccess.value = false
+                }
+            }
+
+            override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                _isLoading.value = false
                 _registerSuccess.value = false
             }
-        }
+        })
     }
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EmailCustomeView">
+        <attr name="hintText" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="PasswordCustomeView">
+        <attr name="toggleIcon" format="reference" />
+    </declare-styleable>
+</resources>
