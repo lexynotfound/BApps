@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cosplay_akatsuki_naruto_geek">#cosplay #akatsuki #naruto #geek</string>
+    <string name="name">lullydark</string>
+    <string name="date">1 sec ago</string>
+    <string name="logo">Logo</string>
+    <string name="image_profile">image profile</string>
+    <string name="image_post">Image post</string>
+    <string name="icon_like">Icon Like</string>
+    <string name="invalid_email_error">Invalid email address</string>
+    <string name="invalid_password_error">Password must be at least 6 characters</string>
+    <string name="toggle_password_visibility">Toggle password visibility</string>
+    <string name="icon_comment">Icon Comment</string>
+    <string name="icon_share">Icon Share</string>
+    <string name="search">Search</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="notifictaion">Notification</string>
+    <string name="bpost">Post</string>
+    <string name="log_in">Log in</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="english_us">English (US)</string>
+    <string name="Logo">Logo</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="company_logo">Company Logo</string>
+    <string name="usernames">Name</string>
+    <string name="invalid_name_error">name must not blank</string>
+    <string name="register">Sign Up</string>
+    <string name="have_an_account_login">have an account? Login</string>
+    <string name="error_name_required">Name is required</string>
+    <string name="error_email_required">Email is required</string>
+    <string name="error_password_required">Password is required</string>
+</resources>

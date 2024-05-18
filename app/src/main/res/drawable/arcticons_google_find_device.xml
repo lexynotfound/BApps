@@ -1,0 +1,43 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="60dp"
+    android:height="60dp"
+    android:viewportWidth="60"
+    android:viewportHeight="60">
+    <group
+        android:name="animationGroup"
+        android:pivotX="3600"
+        android:pivotY="3600">
+
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M21.25,30H3.125C3.125,44.842 15.158,56.875 30,56.875V38.75"
+            android:strokeWidth="1"
+            android:strokeColor="#000000"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M30,47.813C39.838,47.813 47.813,39.838 47.813,30C47.813,20.162 39.838,12.188 30,12.188C20.162,12.188 12.188,20.162 12.188,30C12.188,39.838 20.162,47.813 30,47.813Z"
+            android:strokeWidth="1"
+            android:strokeColor="#000000"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M30,38.75C34.833,38.75 38.75,34.833 38.75,30C38.75,25.167 34.833,21.25 30,21.25C25.167,21.25 21.25,25.167 21.25,30C21.25,34.833 25.167,38.75 30,38.75Z"
+            android:strokeWidth="1"
+            android:strokeColor="#000000"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M38.75,30H56.875C56.875,15.158 44.842,3.125 30,3.125V21.25"
+            android:strokeWidth="1"
+            android:strokeColor="#000000"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:fillColor="#000000"
+            android:pathData="M30,22C25.58,22 22,25.58 22,30C22,33.54 24.29,36.53 27.47,37.59C27.87,37.66 28.02,37.42 28.02,37.21C28.02,37.02 28.01,36.39 28.01,35.72C26,36.09 25.48,35.23 25.32,34.78C25.23,34.55 24.84,33.84 24.5,33.65C24.22,33.5 23.82,33.13 24.49,33.12C25.12,33.11 25.57,33.7 25.72,33.94C26.44,35.15 27.59,34.81 28.05,34.6C28.12,34.08 28.33,33.73 28.56,33.53C26.78,33.33 24.92,32.64 24.92,29.58C24.92,28.71 25.23,27.99 25.74,27.43C25.66,27.23 25.38,26.41 25.82,25.31C25.82,25.31 26.49,25.1 28.02,26.13C28.66,25.95 29.34,25.86 30.02,25.86C30.7,25.86 31.38,25.95 32.02,26.13C33.55,25.09 34.22,25.31 34.22,25.31C34.66,26.41 34.38,27.23 34.3,27.43C34.81,27.99 35.12,28.7 35.12,29.58C35.12,32.65 33.25,33.33 31.47,33.53C31.76,33.78 32.01,34.26 32.01,35.01C32.01,36.08 32,36.94 32,37.21C32,37.42 32.15,37.67 32.55,37.59C34.138,37.054 35.519,36.034 36.496,34.672C37.474,33.31 38,31.676 38,30C38,25.58 34.42,22 30,22Z" />
+    </group>
+</vector>

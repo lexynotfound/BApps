@@ -1,7 +1,10 @@
 package com.raihanardila.bapps.core.module
 
-class AppModule {
-    val appModule = module {
+import org.koin.dsl.module
 
-    }
+val appModule = module {
+    includes(
+        viewModule,
+        repoModule
+    )
 }

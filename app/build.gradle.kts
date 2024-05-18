@@ -6,6 +6,7 @@ plugins {
     id("kotlin-android")
     id("androidx.navigation.safeargs")
     id("kotlin-parcelize")
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.23"
 }
 
 android {
@@ -88,8 +89,15 @@ dependencies {
     //livedata
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
-    //Glide
+    //Glide & Image Loading
     implementation(libs.glide)
+    implementation (libs.shimmer)
+
+    //splash screen
+    implementation (libs.androidx.core.splashscreen)
+
+    //image layout
+    implementation (libs.circleimageview)
 
     //Camera
     implementation(libs.androidx.camera.camera2)
