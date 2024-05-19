@@ -38,6 +38,7 @@ coreKtxVersion = "1.5.0"
 monitor = "1.6.1"
 shimmer = "0.5.0"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
+cardview = "1.0.0"
 
 [libraries]
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraView" }
@@ -89,6 +90,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converte
 androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
 core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxVersion" }
 androidx-monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }
+androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

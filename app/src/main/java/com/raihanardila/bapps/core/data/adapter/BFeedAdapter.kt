@@ -13,12 +13,13 @@ import com.raihanardila.bapps.utils.DateUtils
 class BFeedAdapter(
     private val onUserClick: (StoriesBModel) -> Unit,
     private val onStoryClick: (StoriesBModel) -> Unit,
-    private val onPhotoClick: (String) -> Unit
+    private val onPhotoClick: (String) -> Unit,
+    private val showBottomSheet: (String) -> Unit
 ) : PagingDataAdapter<StoriesBModel, BFeedAdapter.BFeedViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BFeedViewHolder {
         val binding = ListBBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return BFeedViewHolder(binding, onUserClick, onStoryClick, onPhotoClick)
+        return BFeedViewHolder(binding, onUserClick, onStoryClick, onPhotoClick, showBottomSheet)
     }
 
     override fun onBindViewHolder(holder: BFeedViewHolder, position: Int) {
@@ -30,29 +31,32 @@ class BFeedAdapter(
         private val binding: ListBBinding,
         private val onUserClick: (StoriesBModel) -> Unit,
         private val onStoryClick: (StoriesBModel) -> Unit,
-        private val onPhotoClick: (String) -> Unit
+        private val onPhotoClick: (String) -> Unit,
+        private val showBottomSheet: (String) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(story: StoriesBModel) {
             binding.name.text = story.name
-            val createdAtMillis = DateUtils.parseIso8601(story.createdAt)
             val currentTime = System.currentTimeMillis()
-            val timeDiffer = DateUtils.formatTimeDifference(createdAtMillis, currentTime)
+            val timeDiffer = DateUtils.formatTimeDifference(DateUtils.parseIso8601(story.createdAt), currentTime)
             binding.date.text = timeDiffer
             binding.postContent.text = story.description
 
-            // Load the image using your preferred image loading library
-             Glide.with(
-                 binding.ImageB.context
-             ).load(
-                 story.photoUrl
-             ).into(
-                 binding.ImageB
-             )
+            Glide.with(binding.ImageB.context).load(story.photoUrl).into(binding.ImageB)
 
             binding.root.setOnClickListener { onStoryClick(story) }
             binding.profile.setOnClickListener { onUserClick(story) }
             binding.ImageB.setOnClickListener { onPhotoClick(story.photoUrl) }
+
+            binding.ImageB.setOnLongClickListener {
+                showBottomSheet(story.photoUrl)
+                true
+            }
+
+            binding.cardView.setOnLongClickListener {
+                showBottomSheet(story.photoUrl)
+                true
+            }
         }
     }
 

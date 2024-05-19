@@ -15,6 +15,7 @@ import com.raihanardila.bapps.core.data.local.prefrences.AuthPreferences
 import com.raihanardila.bapps.core.data.model.StoriesBModel
 import com.raihanardila.bapps.core.data.viewmodel.BMainViewModel
 import com.raihanardila.bapps.databinding.FragmentHomeBinding
+import com.raihanardila.bapps.ui.customeview.download.DownloadBottomSheetFragment
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -59,7 +60,8 @@ class HomeFragment : Fragment() {
         bFeedAdapter = BFeedAdapter(
             onUserClick = { story -> navigateToUserDetail(story) },
             onStoryClick = { story -> navigateToStoryDetail(story) },
-            onPhotoClick = { photoUrl -> navigateToPhotoDetail(photoUrl) }
+            onPhotoClick = { photoUrl -> navigateToPhotoDetail(photoUrl) },
+            showBottomSheet = { photoUrl -> showDownloadBottomSheet(photoUrl) }
         )
 
         binding.rvBFeed.apply {
@@ -81,6 +83,12 @@ class HomeFragment : Fragment() {
     fun isScrolledToTop(): Boolean {
         val layoutManager = binding.rvBFeed.layoutManager as LinearLayoutManager
         return layoutManager.findFirstVisibleItemPosition() == 0 && layoutManager.findViewByPosition(0)?.top == 0
+    }
+
+    private fun showDownloadBottomSheet(photoUrl: String) {
+        val bottomSheet = DownloadBottomSheetFragment()
+        bottomSheet.setPhotoUrl(photoUrl)
+        bottomSheet.show(childFragmentManager, bottomSheet.tag)
     }
 
     private fun navigateToUserDetail(story: StoriesBModel) {

@@ -4,6 +4,8 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -18,9 +20,17 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.raihanardila.bapps.R
+import com.raihanardila.bapps.core.data.viewmodel.BStoriesViewModel
 import com.raihanardila.bapps.databinding.FragmentBPostBinding
 import com.raihanardila.bapps.utils.PermissionUtils
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -30,11 +40,14 @@ class BPostFragment : Fragment() {
 
     private var _binding: FragmentBPostBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: BStoriesViewModel by viewModel()
 
     private lateinit var currentPhotoPath: String
+    private var selectedImageUri: Uri? = null
 
     private val launcherGallery = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
         uri?.let {
+            selectedImageUri = it
             binding.ivPreviewImage.setImageURI(it)
             binding.cardViewPreview.visibility = View.VISIBLE
         }
@@ -73,6 +86,19 @@ class BPostFragment : Fragment() {
                 getCurrentLocation()
             } else {
                 requestLocationPermission()
+            }
+        }
+
+        binding.btnPost.setOnClickListener {
+            if (selectedImageUri != null) {
+                val descriptionText = binding.etPostText.text.toString()
+                if (descriptionText.isNotBlank()) {
+                    uploadImage(selectedImageUri!!, descriptionText)
+                } else {
+                    Toast.makeText(requireContext(), "Please enter a description", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -140,9 +166,6 @@ class BPostFragment : Fragment() {
         startActivityForResult(intent, PermissionUtils.REQUEST_CAMERA_PERMISSION)
     }
 
-
-
-
     private fun openGallery() {
         launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
     }
@@ -167,6 +190,81 @@ class BPostFragment : Fragment() {
         }
     }
 
+    private fun resizeImage(file: File): File {
+        val options = BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
+        }
+        BitmapFactory.decodeFile(file.path, options)
+        val (width, height) = options.run { outWidth to outHeight }
+
+        val maxSize = 1000
+        var scaleFactor = 1
+
+        if (width > height) {
+            if (width > maxSize) scaleFactor = width / maxSize
+        } else {
+            if (height > maxSize) scaleFactor = height / maxSize
+        }
+
+        options.inJustDecodeBounds = false
+        options.inSampleSize = scaleFactor
+
+        val resizedBitmap = BitmapFactory.decodeFile(file.path, options)
+
+        val resizedFile = createImageFile()
+        val outputStream = FileOutputStream(resizedFile)
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 85, outputStream)
+        outputStream.flush()
+        outputStream.close()
+
+        return resizedFile
+    }
+
+    private fun uploadImage(uri: Uri, descriptionText: String) {
+        binding.progressBar.visibility = View.VISIBLE
+
+        val file = if (uri.scheme == "content") {
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            val tempFile = createImageFile()
+            inputStream?.use { input ->
+                tempFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+            tempFile
+        } else {
+            File(currentPhotoPath)
+        }
+
+        val resizedFile = if (file.length() > 1_000_000) resizeImage(file) else file
+
+        val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), resizedFile)
+        val body = MultipartBody.Part.createFormData("photo", resizedFile.name, requestFile)
+        val description = RequestBody.create("text/plain".toMediaTypeOrNull(), descriptionText)
+
+        viewModel.uploadImage(body, description, null, null).observe(viewLifecycleOwner) { response ->
+            binding.progressBar.visibility = View.GONE
+
+            if (response != null) {
+                if (!response.error) {
+                    Toast.makeText(requireContext(), "Upload successful", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_bpostFragment_to_homeFragment)
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Upload failed: ${response.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Upload failed: Response is null",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
 
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -206,6 +304,8 @@ class BPostFragment : Fragment() {
                     val uri = FileProvider.getUriForFile(requireContext(), "com.raihanardila.bapps.fileprovider", file)
                     binding.ivPreviewImage.setImageURI(uri)
                     binding.cardViewPreview.visibility = View.VISIBLE
+                    // Don't call uploadImage here; call it when user confirms the upload action
+                    selectedImageUri = uri
                     val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
                     val contentUri = Uri.fromFile(file)
                     mediaScanIntent.data = contentUri
@@ -216,6 +316,8 @@ class BPostFragment : Fragment() {
                     selectedImage?.let {
                         binding.ivPreviewImage.setImageURI(it)
                         binding.cardViewPreview.visibility = View.VISIBLE
+                        // Don't call uploadImage here; call it when user confirms the upload action
+                        selectedImageUri = it
                     }
                 }
             }

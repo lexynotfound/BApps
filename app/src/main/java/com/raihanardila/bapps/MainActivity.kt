@@ -55,38 +55,43 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNavClickListener() {
         binding.bottomNav.setOnItemSelectedListener { menuItem ->
-            handleBottomNavClick()
+            handleBottomNavClick(menuItem.itemId)
             true
         }
 
         binding.bottomNav.setOnItemReselectedListener { menuItem ->
-            handleBottomNavClick()
+            handleBottomNavClick(menuItem.itemId)
         }
     }
 
-    private fun handleBottomNavClick() {
+    private fun handleBottomNavClick(itemId: Int) {
         val currentTime = System.currentTimeMillis()
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.frame_container) as NavHostFragment
         val fragment = navHostFragment.childFragmentManager.fragments.firstOrNull()
 
-        if (fragment is HomeFragment) {
-            if (currentTime - lastClickTime < doubleClickTimeDelta) {
-                fragment.scrollToTop()
-                fragment.viewLifecycleOwner.lifecycleScope.launch {
-                    fragment.bFeedAdapter.refresh()
-                }
-            } else {
-                if (fragment.isScrolledToTop()) {
+        if (itemId == R.id.homeFragment) {
+            if (fragment is HomeFragment) {
+                if (currentTime - lastClickTime < doubleClickTimeDelta) {
+                    fragment.scrollToTop()
                     fragment.viewLifecycleOwner.lifecycleScope.launch {
                         fragment.bFeedAdapter.refresh()
                     }
                 } else {
-                    fragment.scrollToTop()
+                    if (fragment.isScrolledToTop()) {
+                        fragment.viewLifecycleOwner.lifecycleScope.launch {
+                            fragment.bFeedAdapter.refresh()
+                        }
+                    } else {
+                        fragment.scrollToTop()
+                    }
                 }
             }
+            lastClickTime = currentTime
+        } else {
+            // Ensure other navigation actions are not intercepted
+            navController.navigate(itemId)
         }
-        lastClickTime = currentTime
     }
 
     private fun showBottomNav() {
