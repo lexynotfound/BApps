@@ -4,9 +4,12 @@ import android.util.Log
 import com.raihanardila.bapps.BuildConfig
 import com.raihanardila.bapps.core.data.local.prefrences.AuthPreferences
 import com.raihanardila.bapps.core.data.remote.client.ApiService
+import com.raihanardila.bapps.core.data.local.repository.BMainRepository
+import com.raihanardila.bapps.core.data.viewmodel.BMainViewModel
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
