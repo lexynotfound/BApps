@@ -50,7 +50,7 @@ class PasswordCustomeView(context: Context, attrs: AttributeSet) : LinearLayout(
     }
 
     private fun validatePassword(password: String) {
-        if (password.length < 6) {
+        if (password.length < 8) {
             passwordInputLayout.error = context.getString(R.string.invalid_password_error)
             passwordInputLayout.boxStrokeColor = ContextCompat.getColor(context, R.color.red)
         } else {
