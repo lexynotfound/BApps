@@ -7,6 +7,7 @@ coreSplashscreen = "1.0.1"
 converterGson = "2.10.0"
 coreTesting = "2.2.0"
 datastorePreferences = "1.1.1"
+fragmentKtx = "1.7.1"
 glide = "4.16.0"
 koinCore = "3.5.6"
 koinAndroid = "3.5.6"
@@ -39,6 +40,7 @@ monitor = "1.6.1"
 shimmer = "0.5.0"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
 cardview = "1.0.0"
+viewpager2 = "1.1.0"
 
 [libraries]
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraView" }
@@ -64,6 +66,7 @@ androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "ro
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomPaging" }
 androidx-rules = { module = "androidx.test:rules", version.ref = "coreKtxVersion" }
 androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
+androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }

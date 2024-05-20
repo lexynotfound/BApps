@@ -96,7 +96,16 @@ class HomeFragment : Fragment() {
     }
 
     private fun navigateToStoryDetail(story: StoriesBModel) {
-        // Implement navigation to story detail
+        val bundle = Bundle().apply {
+            putString("name", story.name)
+            putString("id", story.id)
+            putString("description", story.description)
+            putString("photoUrl", story.photoUrl)
+            putString("createdAt", story.createdAt)
+            putDouble("lat", story.lat)
+            putDouble("lon", story.lon)
+        }
+        findNavController().navigate(R.id.action_homeFragment_to_detailBPostFragment, bundle)
     }
 
     private fun navigateToPhotoDetail(photoUrl: String) {

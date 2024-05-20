@@ -55,7 +55,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNavClickListener() {
         binding.bottomNav.setOnItemSelectedListener { menuItem ->
-            handleBottomNavClick(menuItem.itemId)
+            if (navController.currentDestination?.id != menuItem.itemId) {
+                handleBottomNavClick(menuItem.itemId)
+            }
             true
         }
 
@@ -86,11 +88,15 @@ class MainActivity : AppCompatActivity() {
                         fragment.scrollToTop()
                     }
                 }
+            } else {
+                navController.navigate(R.id.homeFragment)
             }
             lastClickTime = currentTime
         } else {
             // Ensure other navigation actions are not intercepted
-            navController.navigate(itemId)
+            if (navController.currentDestination?.id != itemId) {
+                navController.navigate(itemId)
+            }
         }
     }
 
@@ -100,5 +106,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun hideBottomNav() {
         binding.bottomNav.visibility = View.GONE
+    }
+
+    override fun onBackPressed() {
+        if (navController.currentDestination?.id == R.id.homeFragment) {
+            // Handle the back press to minimize app if on the home screen
+            moveTaskToBack(true)
+        } else {
+            super.onBackPressed()
+        }
     }
 }
