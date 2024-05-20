@@ -36,26 +36,28 @@ class BFeedAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(story: StoriesBModel) {
-            binding.name.text = story.name
-            val currentTime = System.currentTimeMillis()
-            val timeDiffer = DateUtils.formatTimeDifference(DateUtils.parseIso8601(story.createdAt), currentTime)
-            binding.date.text = timeDiffer
-            binding.postContent.text = story.description
+            binding.apply {
+                name.text = story.name
+                val currentTime = System.currentTimeMillis()
+                val timeDiffer = DateUtils.formatTimeDifference(DateUtils.parseIso8601(story.createdAt), currentTime)
+                date.text = timeDiffer
+                postContent.text = story.description
 
-            Glide.with(binding.ImageB.context).load(story.photoUrl).into(binding.ImageB)
+                Glide.with(binding.ImageB.context).load(story.photoUrl).into(binding.ImageB)
 
-            binding.root.setOnClickListener { onStoryClick(story) }
-            binding.profile.setOnClickListener { onUserClick(story) }
-            binding.ImageB.setOnClickListener { onPhotoClick(story.photoUrl) }
+                root.setOnClickListener { onStoryClick(story) }
+                profile.setOnClickListener { onUserClick(story) }
+                ImageB.setOnClickListener { onPhotoClick(story.photoUrl) }
 
-            binding.ImageB.setOnLongClickListener {
-                showBottomSheet(story.photoUrl)
-                true
-            }
+                ImageB.setOnLongClickListener {
+                    showBottomSheet(story.photoUrl)
+                    true
+                }
 
-            binding.cardView.setOnLongClickListener {
-                showBottomSheet(story.photoUrl)
-                true
+                cardView.setOnLongClickListener {
+                    showBottomSheet(story.photoUrl)
+                    true
+                }
             }
         }
     }

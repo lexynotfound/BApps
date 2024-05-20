@@ -84,6 +84,7 @@ dependencies {
 
     //room
     implementation(libs.androidx.room.runtime)
+    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.paging)
 

@@ -8,7 +8,7 @@ import retrofit2.Call
 import retrofit2.Response
 
 class AuthRepository(
-    val apiService: ApiService
+    private val apiService: ApiService
 ) {
 
     fun login(authModel: AuthModel): Call<LoginResponse> {
