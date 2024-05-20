@@ -3,13 +3,10 @@ package com.raihanardila.bapps.core.data.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.raihanardila.bapps.core.data.local.repository.AuthRepository
 import com.raihanardila.bapps.core.data.model.AuthModel
 import com.raihanardila.bapps.core.data.remote.response.auth.LoginResponse
 import com.raihanardila.bapps.core.data.remote.response.auth.RegisterResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,13 +56,12 @@ class AuthViewModel(
         val call = authRepository.register(authModel)
 
         call.enqueue(object : Callback<RegisterResponse> {
-            override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+            override fun onResponse(
+                call: Call<RegisterResponse>,
+                response: Response<RegisterResponse>
+            ) {
                 _isLoading.value = false
-                if (response.isSuccessful && response.body()?.error == false) {
-                    _registerSuccess.value = true
-                } else {
-                    _registerSuccess.value = false
-                }
+                _registerSuccess.value = response.isSuccessful && response.body()?.error == false
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {

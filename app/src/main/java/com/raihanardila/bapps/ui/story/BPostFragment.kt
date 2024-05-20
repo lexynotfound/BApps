@@ -3,6 +3,7 @@ package com.raihanardila.bapps.ui.story
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.Intent.ACTION_MEDIA_SCANNER_SCAN_FILE
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -15,9 +16,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.PickVisualMediaRequest
-import androidx.core.content.ContextCompat
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -27,7 +27,8 @@ import com.raihanardila.bapps.databinding.FragmentBPostBinding
 import com.raihanardila.bapps.utils.PermissionUtils
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -35,7 +36,6 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 
-@Suppress("DEPRECATION")
 class BPostFragment : Fragment() {
 
     private var _binding: FragmentBPostBinding? = null
@@ -45,13 +45,14 @@ class BPostFragment : Fragment() {
     private lateinit var currentPhotoPath: String
     private var selectedImageUri: Uri? = null
 
-    private val launcherGallery = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
-        uri?.let {
-            selectedImageUri = it
-            binding.ivPreviewImage.setImageURI(it)
-            binding.cardViewPreview.visibility = View.VISIBLE
+    private val launcherGallery =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
+            uri?.let {
+                selectedImageUri = it
+                binding.ivPreviewImage.setImageURI(it)
+                binding.cardViewPreview.visibility = View.VISIBLE
+            }
         }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,7 +83,11 @@ class BPostFragment : Fragment() {
         }
 
         binding.ivAddLocation.setOnClickListener {
-            if (PermissionUtils.checkPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+            if (PermissionUtils.checkPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            ) {
                 getCurrentLocation()
             } else {
                 requestLocationPermission()
@@ -95,7 +100,11 @@ class BPostFragment : Fragment() {
                 if (descriptionText.isNotBlank()) {
                     uploadImage(selectedImageUri!!, descriptionText)
                 } else {
-                    Toast.makeText(requireContext(), "Please enter a description", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter a description",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } else {
                 Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show()
@@ -112,12 +121,14 @@ class BPostFragment : Fragment() {
                     Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
                 )
             }
+
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
                 arrayOf(
                     Manifest.permission.READ_MEDIA_IMAGES,
                     Manifest.permission.READ_MEDIA_VIDEO
                 )
             }
+
             else -> {
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
@@ -126,24 +137,52 @@ class BPostFragment : Fragment() {
 
     private fun requestCameraPermission() {
         if (PermissionUtils.shouldShowRationale(requireActivity(), Manifest.permission.CAMERA)) {
-            Toast.makeText(context, "Camera permission is required to take pictures", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                "Camera permission is required to take pictures",
+                Toast.LENGTH_SHORT
+            ).show()
         }
-        PermissionUtils.requestPermission(requireActivity(), Manifest.permission.CAMERA, PermissionUtils.REQUEST_CAMERA_PERMISSION)
+        PermissionUtils.requestPermission(
+            requireActivity(),
+            Manifest.permission.CAMERA,
+            PermissionUtils.REQUEST_CAMERA_PERMISSION
+        )
     }
 
     private fun requestGalleryPermission() {
         val storagePermissions = getStoragePermission()
         if (PermissionUtils.shouldShowRationale(requireActivity(), storagePermissions[0])) {
-            Toast.makeText(context, "Storage permission is required to select pictures", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                "Storage permission is required to select pictures",
+                Toast.LENGTH_SHORT
+            ).show()
         }
-        PermissionUtils.requestPermission(requireActivity(), storagePermissions[0], PermissionUtils.REQUEST_GALLERY_PERMISSION)
+        PermissionUtils.requestPermission(
+            requireActivity(),
+            storagePermissions[0],
+            PermissionUtils.REQUEST_GALLERY_PERMISSION
+        )
     }
 
     private fun requestLocationPermission() {
-        if (PermissionUtils.shouldShowRationale(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-            Toast.makeText(context, "Location permission is required to get current location", Toast.LENGTH_SHORT).show()
+        if (PermissionUtils.shouldShowRationale(
+                requireActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        ) {
+            Toast.makeText(
+                context,
+                "Location permission is required to get current location",
+                Toast.LENGTH_SHORT
+            ).show()
         }
-        PermissionUtils.requestPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION, PermissionUtils.REQUEST_LOCATION_PERMISSION)
+        PermissionUtils.requestPermission(
+            requireActivity(),
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            PermissionUtils.REQUEST_LOCATION_PERMISSION
+        )
     }
 
     private fun openCamera() {
@@ -177,7 +216,10 @@ class BPostFragment : Fragment() {
     @Throws(IOException::class)
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Bacot")
+        val storageDir = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            "Bacot"
+        )
         if (!storageDir.exists()) {
             storageDir.mkdirs()
         }
@@ -238,36 +280,42 @@ class BPostFragment : Fragment() {
 
         val resizedFile = if (file.length() > 1_000_000) resizeImage(file) else file
 
-        val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), resizedFile)
+        val requestFile = resizedFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
         val body = MultipartBody.Part.createFormData("photo", resizedFile.name, requestFile)
-        val description = RequestBody.create("text/plain".toMediaTypeOrNull(), descriptionText)
+        val description = descriptionText.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        viewModel.uploadImage(body, description, null, null).observe(viewLifecycleOwner) { response ->
-            binding.progressBar.visibility = View.GONE
+        viewModel.uploadImage(body, description, null, null)
+            .observe(viewLifecycleOwner) { response ->
+                binding.progressBar.visibility = View.GONE
 
-            if (response != null) {
-                if (!response.error) {
-                    Toast.makeText(requireContext(), "Upload successful", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_bpostFragment_to_homeFragment)
+                if (response != null) {
+                    if (!response.error) {
+                        Toast.makeText(requireContext(), "Upload successful", Toast.LENGTH_SHORT)
+                            .show()
+                        findNavController().navigate(R.id.action_bpostFragment_to_homeFragment)
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Upload failed: ${response.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        "Upload failed: ${response.message}",
+                        "Upload failed: Response is null",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Upload failed: Response is null",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
-        }
     }
 
     @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             PermissionUtils.REQUEST_CAMERA_PERMISSION -> {
@@ -277,6 +325,7 @@ class BPostFragment : Fragment() {
                     Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
                 }
             }
+
             PermissionUtils.REQUEST_GALLERY_PERMISSION -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     openGallery()
@@ -284,6 +333,7 @@ class BPostFragment : Fragment() {
                     Toast.makeText(context, "Storage permission denied", Toast.LENGTH_SHORT).show()
                 }
             }
+
             PermissionUtils.REQUEST_LOCATION_PERMISSION -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     getCurrentLocation()
@@ -301,16 +351,21 @@ class BPostFragment : Fragment() {
             when (requestCode) {
                 PermissionUtils.REQUEST_CAMERA_PERMISSION -> {
                     val file = File(currentPhotoPath)
-                    val uri = FileProvider.getUriForFile(requireContext(), "com.raihanardila.bapps.fileprovider", file)
+                    val uri = FileProvider.getUriForFile(
+                        requireContext(),
+                        "com.raihanardila.bapps.fileprovider",
+                        file
+                    )
                     binding.ivPreviewImage.setImageURI(uri)
                     binding.cardViewPreview.visibility = View.VISIBLE
                     // Don't call uploadImage here; call it when user confirms the upload action
                     selectedImageUri = uri
-                    val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+                    val mediaScanIntent = Intent(ACTION_MEDIA_SCANNER_SCAN_FILE)
                     val contentUri = Uri.fromFile(file)
                     mediaScanIntent.data = contentUri
                     requireActivity().sendBroadcast(mediaScanIntent)
                 }
+
                 PermissionUtils.REQUEST_GALLERY_PERMISSION -> {
                     val selectedImage: Uri? = data?.data
                     selectedImage?.let {

@@ -6,12 +6,6 @@ import android.content.SharedPreferences
 class AuthPreferences (
     context: Context
 ) {
-
-    companion object {
-        private const val PREFS_NAME = "auth_prefs"
-        private const val TOKEN_KEY = "auth_token"
-    }
-
     private val preferences: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     // Menyimpan token
@@ -32,4 +26,10 @@ class AuthPreferences (
         editor.remove(TOKEN_KEY)
         editor.apply()
     }
+
+    companion object {
+        private const val PREFS_NAME = "auth_prefs"
+        private const val TOKEN_KEY = "auth_token"
+    }
+
 }

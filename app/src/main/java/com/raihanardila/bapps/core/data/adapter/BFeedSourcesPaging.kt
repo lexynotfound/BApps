@@ -2,7 +2,6 @@ package com.raihanardila.bapps.core.data.adapter
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.raihanardila.bapps.core.data.local.prefrences.AuthPreferences
 import com.raihanardila.bapps.core.data.model.StoriesBModel
 import com.raihanardila.bapps.core.data.remote.client.ApiService
 
