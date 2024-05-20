@@ -13,7 +13,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="cosplay_akatsuki_naruto_geek">#cosplay #akatsuki #naruto #geek</string>
     <string name="invalid_email_error">Invalid email address</string>
-    <string name="invalid_password_error">Password must be at least 6 characters</string>
+    <string name="invalid_password_error">Password must be at least 8 characters</string>
     <string name="toggle_password_visibility">Toggle password visibility</string>
     <string name="toggle_password_visibility_off">Toggle password visibility</string>
     <string name="name">lullydark</string>
@@ -75,4 +75,5 @@
     <string name="apperance">Apperance</string>
     <string name="drk_light"><![CDATA[Dark & Light]]></string>
     <string name="logout">Logout</string>
+    <string name="design">Design</string>
 </resources>

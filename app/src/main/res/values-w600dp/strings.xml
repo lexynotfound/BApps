@@ -63,4 +63,5 @@
     <string name="apperance">Apperance</string>
     <string name="drk_light"><![CDATA[Dark & Light]]></string>
     <string name="logout">Logout</string>
+    <string name="design">Design</string>
 </resources>
