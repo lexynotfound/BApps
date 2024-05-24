@@ -84,9 +84,7 @@ class BMainViewModelTest {
         // Assert that the first item matches the expected item
         val expectedFirstItem = Dummys.generateResponse().first()
         val actualFirstItem = differ.snapshot().first()
-        Assert.assertEquals(expectedFirstItem.id, actualFirstItem?.id)
-        Assert.assertEquals(expectedFirstItem.name, actualFirstItem?.name)
-        Assert.assertEquals(expectedFirstItem.description, actualFirstItem?.description)
+        Assert.assertEquals(expectedFirstItem, actualFirstItem)
     }
 
     @Test
