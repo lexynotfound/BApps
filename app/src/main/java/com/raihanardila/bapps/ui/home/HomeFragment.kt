@@ -108,8 +108,8 @@ class HomeFragment : Fragment() {
             putString("description", story.description)
             putString("photoUrl", story.photoUrl)
             putString("createdAt", story.createdAt)
-            story.lat.let { putDouble("lat", it) }
-            story.lon.let { putDouble("lon", it) }
+            putDouble("lat", story.lat)
+            putDouble("lon", story.lon)
         }
         findNavController().navigate(R.id.action_homeFragment_to_detailBPostFragment, bundle)
     }
@@ -128,8 +128,8 @@ class HomeFragment : Fragment() {
             putString("description", story.description)
             putString("photoUrl", story.photoUrl)
             putString("createdAt", story.createdAt)
-            story.lat.let { putDouble("lat", it) }
-            story.lon.let { putDouble("lon", it) }
+            putDouble("lat", story.lat)
+            putDouble("lon", story.lon)
         }
         findNavController().navigate(R.id.action_homeFragment_to_mapsFragment, bundle)
     }
