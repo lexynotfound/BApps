@@ -4,11 +4,9 @@ import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.paging.AsyncPagingDataDiffer
 import androidx.paging.PagingData
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.raihanardila.bapps.core.data.adapter.BFeedAdapter.Companion.DIFF_CALLBACK
 import com.raihanardila.bapps.core.data.local.repository.BMainRepository
-import com.raihanardila.bapps.core.data.model.StoriesBModel
 import com.raihanardila.bapps.utils.Dummys
 import com.raihanardila.bapps.utils.MainTestRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -55,14 +53,13 @@ class BMainViewModelTest {
         viewModel = BMainViewModel(repository)
     }
 
-
     @After
     fun tearDown() {
         logMock.close()
     }
 
     @Test
-    fun `when Get Stories successfully loaded`() = runTest {
+    fun `when Get Stories first successfully loaded`() = runTest {
         whenever(
             repository.getStories(
                 1,
@@ -78,10 +75,37 @@ class BMainViewModelTest {
         val actualStories = viewModel.storiesFlow.first()
         differ.submitData(actualStories)
 
+        // Assert that the data is not null
         Assert.assertNotNull(differ.snapshot())
-        Assert.assertTrue(differ.snapshot().isNotEmpty())
+
+        // Assert that the number of items matches the expected number
+        Assert.assertEquals(Dummys.generateResponse().size, differ.snapshot().size)
+
+        // Assert that the first item matches the expected item
+        val expectedFirstItem = Dummys.generateResponse().first()
+        val actualFirstItem = differ.snapshot().first()
+        Assert.assertEquals(expectedFirstItem.id, actualFirstItem?.id)
+        Assert.assertEquals(expectedFirstItem.name, actualFirstItem?.name)
+        Assert.assertEquals(expectedFirstItem.description, actualFirstItem?.description)
     }
 
+    @Test
+    fun `when Get Stories amount of data is matching as expected`() = runTest {
+        val dummyStory = Dummys.generateResponse()
+        val pagingData = PagingData.from(dummyStory)
+        whenever(repository.getStories(1, 20)).thenReturn(flowOf(pagingData))
+
+        val actualStory = viewModel.storiesFlow.first()
+        val differ = AsyncPagingDataDiffer(
+            diffCallback = DIFF_CALLBACK,
+            updateCallback = NoopListCallback,
+            workerDispatcher = mainCoroutineRule.dispatcher
+        )
+        differ.submitData(actualStory)
+
+        Assert.assertNotNull(differ.snapshot())
+        Assert.assertEquals(dummyStory.size, differ.snapshot().size)
+    }
 
     @Test
     fun `when Get Stories returns empty`() = runTest {
