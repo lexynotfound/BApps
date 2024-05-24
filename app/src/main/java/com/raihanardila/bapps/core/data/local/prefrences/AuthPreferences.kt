@@ -3,10 +3,11 @@ package com.raihanardila.bapps.core.data.local.prefrences
 import android.content.Context
 import android.content.SharedPreferences
 
-class AuthPreferences (
+class AuthPreferences(
     context: Context
 ) {
-    private val preferences: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val preferences: SharedPreferences =
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     // Menyimpan token
     fun saveToken(token: String) {

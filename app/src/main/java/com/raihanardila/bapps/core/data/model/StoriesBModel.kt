@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity("bfeed")
-data class StoriesBModel (
+data class StoriesBModel(
     @SerializedName("name")
     val name: String,
     @PrimaryKey
@@ -21,4 +21,4 @@ data class StoriesBModel (
     val lat: Double,
     @SerializedName("lon")
     val lon: Double
-    )
+)

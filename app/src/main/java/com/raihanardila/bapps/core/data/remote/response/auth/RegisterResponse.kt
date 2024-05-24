@@ -2,7 +2,7 @@ package com.raihanardila.bapps.core.data.remote.response.auth
 
 import com.google.gson.annotations.SerializedName
 
-data class RegisterResponse (
+data class RegisterResponse(
     @SerializedName("error")
     val error: Boolean,
 

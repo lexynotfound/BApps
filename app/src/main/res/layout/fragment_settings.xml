@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -28,21 +27,21 @@
                     android:id="@+id/ivBack"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_back"
-                    android:contentDescription="@string/back"
-                    android:layout_marginStart="16dp"
                     android:layout_gravity="start"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="@string/back"
+                    android:src="@drawable/ic_back" />
 
                 <ImageView
                     android:id="@+id/ivMoreOptions"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_more_options"
-                    android:contentDescription="@string/more_options"
-                    android:layout_marginEnd="16dp"
                     android:layout_gravity="end"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:contentDescription="@string/more_options"
+                    android:src="@drawable/ic_more_options" />
 
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -91,9 +90,9 @@
                 android:id="@+id/material_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/icon_setting"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/icon_setting"
-                app:layout_constraintBottom_toBottomOf="@+id/icon_setting"/>
+                app:layout_constraintTop_toTopOf="@+id/icon_setting" />
 
             <!-- Logout Icon and Text -->
             <ImageView
@@ -123,9 +122,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/text_logout"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/text_logout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

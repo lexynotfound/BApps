@@ -2,28 +2,37 @@ package com.raihanardila.bapps.ui.story
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_MEDIA_SCANNER_SCAN_FILE
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.raihanardila.bapps.R
 import com.raihanardila.bapps.core.data.viewmodel.BStoriesViewModel
 import com.raihanardila.bapps.databinding.FragmentBPostBinding
+import com.raihanardila.bapps.utils.GeocodingUtils
 import com.raihanardila.bapps.utils.PermissionUtils
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -34,7 +43,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.*
 
 class BPostFragment : Fragment() {
 
@@ -44,6 +53,9 @@ class BPostFragment : Fragment() {
 
     private lateinit var currentPhotoPath: String
     private var selectedImageUri: Uri? = null
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var latitude: Double? = null
+    private var longitude: Double? = null
 
     private val launcherGallery =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
@@ -64,6 +76,8 @@ class BPostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         binding.ivCamera.setOnClickListener {
             if (PermissionUtils.checkPermission(requireContext(), Manifest.permission.CAMERA)) {
@@ -88,7 +102,7 @@ class BPostFragment : Fragment() {
                     Manifest.permission.ACCESS_FINE_LOCATION
                 )
             ) {
-                getCurrentLocation()
+                checkGPSAndFetchLocation()
             } else {
                 requestLocationPermission()
             }
@@ -209,8 +223,57 @@ class BPostFragment : Fragment() {
         launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
     }
 
+    private fun checkGPSAndFetchLocation() {
+        val locationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            AlertDialog.Builder(requireContext())
+                .setMessage("GPS is disabled. Do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes") { _, _ ->
+                    startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                }
+                .show()
+        } else {
+            getCurrentLocation()
+        }
+    }
+
     private fun getCurrentLocation() {
-        // Implement location retrieval logic
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestLocationPermission()
+            return
+        }
+
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    latitude = location.latitude
+                    longitude = location.longitude
+                    val address =
+                        GeocodingUtils.getLocationName(requireContext(), latitude, longitude)
+                    binding.ivRecentLocation.visibility = View.VISIBLE
+                    binding.tvLocation.visibility = View.VISIBLE
+                    binding.tvLocation.text = address
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Unable to get current location",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(
+                    requireContext(),
+                    "Failed to get location",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
     }
 
     @Throws(IOException::class)
@@ -284,7 +347,11 @@ class BPostFragment : Fragment() {
         val body = MultipartBody.Part.createFormData("photo", resizedFile.name, requestFile)
         val description = descriptionText.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        viewModel.uploadImage(body, description, null, null)
+        // Include latitude and longitude in the upload request
+        val latBody = latitude?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val lonBody = longitude?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        viewModel.uploadImage(body, description, latBody, lonBody)
             .observe(viewLifecycleOwner) { response ->
                 binding.progressBar.visibility = View.GONE
 

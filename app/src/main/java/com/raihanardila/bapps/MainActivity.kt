@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.raihanardila.bapps.databinding.ActivityMainBinding
 import com.raihanardila.bapps.ui.home.HomeFragment
 import kotlinx.coroutines.launch
@@ -46,6 +45,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.searchFragment,
                 R.id.notificationFragment,
                 R.id.profileFragment -> showBottomNav()
+
                 else -> hideBottomNav()
             }
         }

@@ -42,6 +42,15 @@
         <action
             android:id="@+id/action_homeFragment_to_detailBPostFragment"
             app:destination="@id/bpostDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_imageDetailFragment"
+            app:destination="@id/imageDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_mapsActivity"
+            app:destination="@id/mapsActivity" />
     </fragment>
 
     <fragment
@@ -105,4 +114,29 @@
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <dialog
+        android:id="@+id/downloadBottomSheetFragment"
+        android:name="com.raihanardila.bapps.ui.customeview.download.DownloadBottomSheetFragment"
+        android:label="DownloadBottomSheetFragment"
+        tools:layout="@layout/fragment_download_bottom_sheet"/>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.raihanardila.bapps.ui.maps.MapsFragment"
+        android:label="MapsFragment"
+        tools:layout="@layout/fragment_maps"/>
+    <fragment
+        android:id="@+id/imageDetailFragment"
+        android:name="com.raihanardila.bapps.ui.images.ImageDetailFragment"
+        android:label="ImageDetailFragment"
+        tools:layout="@layout/fragment_image_detail">
+        <action
+            android:id="@+id/action_imageDetailFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <activity
+        android:id="@+id/mapsActivity"
+        android:name="com.raihanardila.bapps.ui.maps.MapsActivity"
+        android:label="activity_maps"
+        tools:layout="@layout/activity_maps" />
+
 </navigation>

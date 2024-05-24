@@ -6,6 +6,8 @@
     <color name="my_light_primary">#FFFFFFFF</color>
     <color name="gray">#A9A9A9</color>
     <color name="blue">#0000FF</color>
+    <color name="my_light_primary_variant">#3700B3</color>
+    <color name="black_variant">#1a1a1a</color>
     <color name="grays">#808080</color>
     <color name="grays_light">#474241</color>
     <color name="red">#FF0000</color>

@@ -1,7 +1,15 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.BApps" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-         <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimary">@color/black</item>
+    </style>
+
+    <style name="Theme.BApps" parent="Base.Theme.BApps" />
+
+    <style name="Theme.BApps.AppBarOverlay" parent="ThemeOverlay.Material3.ActionBar">
+        <!-- Customize AppBarLayout here -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/black</item>
     </style>
 </resources>

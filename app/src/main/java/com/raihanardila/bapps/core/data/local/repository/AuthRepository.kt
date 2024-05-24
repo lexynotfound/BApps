@@ -5,7 +5,6 @@ import com.raihanardila.bapps.core.data.remote.client.ApiService
 import com.raihanardila.bapps.core.data.remote.response.auth.LoginResponse
 import com.raihanardila.bapps.core.data.remote.response.auth.RegisterResponse
 import retrofit2.Call
-import retrofit2.Response
 
 class AuthRepository(
     private val apiService: ApiService
