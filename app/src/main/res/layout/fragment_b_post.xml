@@ -20,32 +20,32 @@
                 android:id="@+id/ivBack"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/ic_back"
-                android:contentDescription="@string/back"
-                android:layout_marginStart="16dp"
                 android:layout_gravity="start"
-                android:layout_marginTop="8dp" />
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/back"
+                android:src="@drawable/ic_back" />
 
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/new_thread"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="8dp" />
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/ivMoreOptions"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/ic_more_options"
-                android:contentDescription="@string/more_options"
-                android:layout_marginEnd="16dp"
                 android:layout_gravity="end"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/more_options"
+                android:src="@drawable/ic_more_options" />
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -62,42 +62,68 @@
             android:id="@+id/ivProfileImage"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:contentDescription="@string/profile_image"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
+            android:contentDescription="@string/profile_image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:text="@string/raiiardiann"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/ivProfileImage"
             app:layout_constraintStart_toEndOf="@id/ivProfileImage"
-            app:layout_constraintTop_toTopOf="@id/ivProfileImage"
-            android:layout_marginStart="16dp" />
+            app:layout_constraintTop_toTopOf="@id/ivProfileImage" />
+
+        <ImageView
+            android:id="@+id/ivRecentLocation"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/add_location"
+            android:padding="8dp"
+            android:src="@drawable/ic_add_location"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/tvUserName"
+            app:layout_constraintTop_toBottomOf="@id/tvUserName" />
+
+        <TextView
+            android:id="@+id/tvLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/location"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/ivRecentLocation"
+            app:layout_constraintStart_toEndOf="@id/ivRecentLocation"
+            app:layout_constraintTop_toTopOf="@id/ivRecentLocation" />
 
         <EditText
             android:id="@+id/etPostText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:autofillHints="@string/whats_new"
-            android:hint="@string/whats_new"
-            android:textColorHint="@android:color/darker_gray"
-            android:background="@android:color/transparent"
-            android:inputType="textMultiLine"
-            android:lines="10"
-            android:gravity="top"
-            android:maxLines="200"
-            app:layout_constraintTop_toBottomOf="@id/tvUserName"
-            app:layout_constraintStart_toStartOf="@id/tvUserName"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp" />
+            android:autofillHints="@string/whats_new"
+            android:background="@android:color/transparent"
+            android:gravity="top"
+            android:hint="@string/whats_new"
+            android:inputType="textMultiLine"
+            android:lines="6"
+            android:maxLines="16"
+            android:textColorHint="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/ivRecentLocation"
+            app:layout_constraintTop_toBottomOf="@id/ivRecentLocation" />
 
         <!-- Image Preview Section -->
         <androidx.cardview.widget.CardView
@@ -105,13 +131,13 @@
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:visibility="gone"
             app:cardCornerRadius="10dp"
             app:cardElevation="4dp"
-            app:layout_constraintTop_toBottomOf="@id/etPostText"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="16dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etPostText">
 
             <ImageView
                 android:id="@+id/ivPreviewImage"
@@ -128,61 +154,61 @@
             android:id="@+id/mediaActionsSection"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
             android:gravity="center_vertical"
-            app:layout_constraintTop_toBottomOf="@id/cardViewPreview"
-            app:layout_constraintStart_toStartOf="parent"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardViewPreview">
 
             <ImageView
                 android:id="@+id/ivAddImage"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/solar_gallery_wide_bold_1"
                 android:contentDescription="@string/add_image"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:src="@drawable/solar_gallery_wide_bold_1" />
 
             <ImageView
                 android:id="@+id/ivCamera"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/jam_camera_alt_f_1"
-                android:hapticFeedbackEnabled="true"
                 android:contentDescription="@string/add_camera"
-                android:padding="8dp" />
+                android:hapticFeedbackEnabled="true"
+                android:padding="8dp"
+                android:src="@drawable/jam_camera_alt_f_1" />
 
             <ImageView
                 android:id="@+id/ivAddGif"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_add_gif"
                 android:contentDescription="@string/add_gif"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:src="@drawable/ic_add_gif" />
 
             <ImageView
                 android:id="@+id/ivAddPoll"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_add_poll"
                 android:contentDescription="@string/add_poll"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:src="@drawable/ic_add_poll" />
 
             <ImageView
                 android:id="@+id/ivAddLocation"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_add_location"
                 android:contentDescription="@string/add_location"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:src="@drawable/ic_add_location" />
 
             <ImageView
                 android:id="@+id/ivMoreActions"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_more_actions"
                 android:contentDescription="@string/more_actions"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:src="@drawable/ic_more_actions" />
         </LinearLayout>
 
         <!-- Reply Permission Text -->
@@ -190,39 +216,39 @@
             android:id="@+id/tvReplyPermission"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@string/your_followers_can_reply_amp_quote"
             android:textColor="@android:color/darker_gray"
-            app:layout_constraintTop_toBottomOf="@id/mediaActionsSection"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            android:layout_marginTop="8dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mediaActionsSection" />
 
         <!-- Post Button -->
         <Button
             android:id="@+id/btnPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/bpost"
-            android:backgroundTint="@color/colorAccent"
-            android:textColor="@android:color/white"
-            android:padding="8dp"
-            app:layout_constraintTop_toBottomOf="@id/tvReplyPermission"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/colorAccent"
+            android:padding="8dp"
+            android:text="@string/bpost"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvReplyPermission" />
 
         <!-- Progress Bar -->
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:indeterminate="true"
             android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:indeterminate="true" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -63,4 +63,14 @@
     <string name="drk_light"><![CDATA[Dark & Light]]></string>
     <string name="logout">Logout</string>
     <string name="design">Design</string>
+    <string name="button_maps">Button Maps</string>
+    <string name="back_button">Back Button</string>
+    <string name="your_current_location">Post location</string>
+    <string name="location">JL. Senayan</string>
+    <string name="image_detail_desc">Image Detail</string>
+    <string name="close_button_desc">Button Backs</string>
+    <string name="more_button">More Button</string>
+    <string name="title">Title</string>
+    <string name="address">Address</string>
+    <string name="description">Description</string>
 </resources>

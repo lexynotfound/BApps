@@ -32,7 +32,7 @@ class RegisterFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
         val view = binding.root
         nameCustomView = view.findViewById(R.id.name_custom_view)
@@ -43,9 +43,12 @@ class RegisterFragment : Fragment() {
         textLogin = view.findViewById(R.id.login_text)
 
         registerButton.setOnClickListener {
-            val name = nameCustomView.findViewById<TextInputEditText>(R.id.username_input).text.toString()
-            val email = emailCustomView.findViewById<TextInputEditText>(R.id.username_input).text.toString()
-            val password = passwordCustomView.findViewById<TextInputEditText>(R.id.password_input).text.toString()
+            val name =
+                nameCustomView.findViewById<TextInputEditText>(R.id.username_input).text.toString()
+            val email =
+                emailCustomView.findViewById<TextInputEditText>(R.id.username_input).text.toString()
+            val password =
+                passwordCustomView.findViewById<TextInputEditText>(R.id.password_input).text.toString()
 
             if (validateFields(name, email, password)) {
                 authViewModel.registerUser(name, email, password)
@@ -73,20 +76,24 @@ class RegisterFragment : Fragment() {
         var isValid = true
 
         if (name.isEmpty()) {
-            nameCustomView.findViewById<TextInputEditText>(R.id.username_input).error = getString(R.string.error_name_required)
+            nameCustomView.findViewById<TextInputEditText>(R.id.username_input).error =
+                getString(R.string.error_name_required)
             isValid = false
         }
 
         if (email.isEmpty()) {
-            emailCustomView.findViewById<TextInputEditText>(R.id.username_input).error = getString(R.string.error_email_required)
+            emailCustomView.findViewById<TextInputEditText>(R.id.username_input).error =
+                getString(R.string.error_email_required)
             isValid = false
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailCustomView.findViewById<TextInputEditText>(R.id.username_input).error = getString(R.string.invalid_email_error)
+            emailCustomView.findViewById<TextInputEditText>(R.id.username_input).error =
+                getString(R.string.invalid_email_error)
             isValid = false
         }
 
         if (password.isEmpty()) {
-            passwordCustomView.findViewById<TextInputEditText>(R.id.password_input).error = getString(R.string.error_password_required)
+            passwordCustomView.findViewById<TextInputEditText>(R.id.password_input).error =
+                getString(R.string.error_password_required)
             isValid = false
         }
 

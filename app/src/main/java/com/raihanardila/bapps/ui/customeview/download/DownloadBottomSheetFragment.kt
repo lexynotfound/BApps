@@ -106,7 +106,10 @@ class DownloadBottomSheetFragment : BottomSheetDialogFragment() {
 
             if (response.isSuccessful) {
                 val fileName = url.substring(url.lastIndexOf("/") + 1)
-                val storageDir = File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Bacot")
+                val storageDir = File(
+                    requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                    "Bacot"
+                )
                 if (!storageDir.exists()) {
                     storageDir.mkdirs()
                 }
@@ -123,7 +126,12 @@ class DownloadBottomSheetFragment : BottomSheetDialogFragment() {
                         "${BuildConfig.APPLICATION_ID}.fileprovider",
                         file
                     )
-                    requireActivity().sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
+                    requireActivity().sendBroadcast(
+                        Intent(
+                            Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                            uri
+                        )
+                    )
 
                     showToast("Photo downloaded successfully")
                     Log.d(TAG, "Photo downloaded successfully")

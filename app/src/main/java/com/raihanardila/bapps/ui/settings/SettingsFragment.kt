@@ -46,17 +46,19 @@ class SettingsFragment : Fragment() {
         tvLogout.setOnClickListener(logoutListener)
 
         // Handle back navigation
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                // If the user is not authenticated, block the back navigation
-                if (authPreferences.getToken().isNullOrEmpty()) {
-                    findNavController().navigate(R.id.loginFragment)
-                } else {
-                    isEnabled = false
-                    requireActivity().onBackPressed()
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // If the user is not authenticated, block the back navigation
+                    if (authPreferences.getToken().isNullOrEmpty()) {
+                        findNavController().navigate(R.id.loginFragment)
+                    } else {
+                        isEnabled = false
+                        requireActivity().onBackPressed()
+                    }
                 }
-            }
-        })
+            })
     }
 
     override fun onResume() {

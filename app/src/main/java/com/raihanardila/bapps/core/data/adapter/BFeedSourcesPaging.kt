@@ -7,17 +7,18 @@ import com.raihanardila.bapps.core.data.remote.client.ApiService
 
 class BFeedSourcesPaging(
     private val apiService: ApiService,
+    private val initialPage: Int
 ) : PagingSource<Int, StoriesBModel>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, StoriesBModel> {
         return try {
-            val currentPage = params.key ?: 1
+            val currentPage = params.key ?: initialPage
             val response = apiService.getStories(page = currentPage, size = params.loadSize)
 
             val data = response.body()?.listStory ?: emptyList()
 
             LoadResult.Page(
                 data = data,
-                prevKey = if (currentPage == 1) null else currentPage - 1,
+                prevKey = if (currentPage == initialPage) null else currentPage - 1,
                 nextKey = if (data.isEmpty()) null else currentPage + 1
             )
         } catch (e: Exception) {

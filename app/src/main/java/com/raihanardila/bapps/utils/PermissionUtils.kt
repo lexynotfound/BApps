@@ -16,7 +16,10 @@ object PermissionUtils {
     }
 
     fun checkPermission(context: Context, permission: String): Boolean {
-        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(
+            context,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     fun shouldShowRationale(activity: Activity, permission: String): Boolean {

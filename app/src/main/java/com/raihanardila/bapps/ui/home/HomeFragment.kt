@@ -21,7 +21,9 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
-    private lateinit var binding: FragmentHomeBinding
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+
     private val viewModel: BMainViewModel by viewModel()
     private lateinit var authPreferences: AuthPreferences
     lateinit var bFeedAdapter: BFeedAdapter
@@ -30,30 +32,30 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val view = binding.root
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         authPreferences = AuthPreferences(requireContext())
-
-        if (authPreferences.getToken().isNullOrEmpty()) {
-            navigateToLogin()
-        }
+        checkAuthentication()
 
         setupAdapter()
         setupSwipeToRefresh()
+        observeViewModel() // Ensure this is called after setting up the adapter and other initializations
+    }
 
-        lifecycleScope.launch {
-            viewModel.storiesFlow.collectLatest { pagingData ->
-                bFeedAdapter.submitData(pagingData)
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun checkAuthentication() {
+        if (authPreferences.getToken().isNullOrEmpty()) {
+            navigateToLogin()
         }
-
-        bFeedAdapter.addLoadStateListener { loadState ->
-            binding.swipeRefresh.isRefreshing = loadState.source.refresh is LoadState.Loading
-            binding.progressBar.visibility = if (loadState.source.refresh is LoadState.Loading) View.VISIBLE else View.GONE
-        }
-
-        return view
     }
 
     private fun setupAdapter() {
@@ -61,13 +63,15 @@ class HomeFragment : Fragment() {
             onUserClick = { story -> navigateToUserDetail(story) },
             onStoryClick = { story -> navigateToStoryDetail(story) },
             onPhotoClick = { photoUrl -> navigateToPhotoDetail(photoUrl) },
-            showBottomSheet = { photoUrl -> showDownloadBottomSheet(photoUrl) }
+            showBottomSheet = { photoUrl -> showDownloadBottomSheet(photoUrl) },
+            onMapsClick = { story -> navigateToMapsDetail(story) }
         )
 
         binding.rvBFeed.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = bFeedAdapter
         }
+
     }
 
     private fun setupSwipeToRefresh() {
@@ -76,19 +80,21 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun scrollToTop() {
-        binding.rvBFeed.smoothScrollToPosition(0)
-    }
-
-    fun isScrolledToTop(): Boolean {
-        val layoutManager = binding.rvBFeed.layoutManager as LinearLayoutManager
-        return layoutManager.findFirstVisibleItemPosition() == 0 && layoutManager.findViewByPosition(0)?.top == 0
-    }
-
-    private fun showDownloadBottomSheet(photoUrl: String) {
-        val bottomSheet = DownloadBottomSheetFragment()
-        bottomSheet.setPhotoUrl(photoUrl)
-        bottomSheet.show(childFragmentManager, bottomSheet.tag)
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            viewModel.storiesFlow.collectLatest { pagingData ->
+                bFeedAdapter.submitData(pagingData)
+            }
+        }
+        lifecycleScope.launch {
+            bFeedAdapter.loadStateFlow.collectLatest { loadState ->
+                if (_binding != null) { // Ensure binding is not null
+                    binding.swipeRefresh.isRefreshing = loadState.refresh is LoadState.Loading
+                    binding.progressBar.visibility =
+                        if (loadState.refresh is LoadState.Loading) View.VISIBLE else View.GONE
+                }
+            }
+        }
     }
 
     private fun navigateToUserDetail(story: StoriesBModel) {
@@ -102,14 +108,47 @@ class HomeFragment : Fragment() {
             putString("description", story.description)
             putString("photoUrl", story.photoUrl)
             putString("createdAt", story.createdAt)
-            putDouble("lat", story.lat)
-            putDouble("lon", story.lon)
+            story.lat.let { putDouble("lat", it) }
+            story.lon.let { putDouble("lon", it) }
         }
         findNavController().navigate(R.id.action_homeFragment_to_detailBPostFragment, bundle)
     }
 
     private fun navigateToPhotoDetail(photoUrl: String) {
-        // Implement navigation to photo detail
+        val bundle = Bundle().apply {
+            putString("photoUrl", photoUrl)
+        }
+        findNavController().navigate(R.id.action_homeFragment_to_imageDetailFragment, bundle)
+    }
+
+    private fun navigateToMapsDetail(story: StoriesBModel) {
+        val bundle = Bundle().apply {
+            putString("name", story.name)
+            putString("id", story.id)
+            putString("description", story.description)
+            putString("photoUrl", story.photoUrl)
+            putString("createdAt", story.createdAt)
+            story.lat.let { putDouble("lat", it) }
+            story.lon.let { putDouble("lon", it) }
+        }
+        findNavController().navigate(R.id.action_homeFragment_to_mapsFragment, bundle)
+    }
+
+    private fun showDownloadBottomSheet(photoUrl: String) {
+        val downloadBottomSheet = DownloadBottomSheetFragment()
+        downloadBottomSheet.setPhotoUrl(photoUrl)
+        downloadBottomSheet.show(childFragmentManager, downloadBottomSheet.tag)
+    }
+
+    fun scrollToTop() {
+        binding.rvBFeed.smoothScrollToPosition(0)
+    }
+
+    fun isScrolledToTop(): Boolean {
+        val layoutManager = binding.rvBFeed.layoutManager as LinearLayoutManager
+        return layoutManager.findFirstVisibleItemPosition() == 0 && layoutManager.findViewByPosition(
+            0
+        )?.top == 0
     }
 
     private fun navigateToLogin() {

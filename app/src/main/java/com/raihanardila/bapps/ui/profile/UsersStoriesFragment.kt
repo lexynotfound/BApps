@@ -60,7 +60,9 @@ class UsersStoriesFragment : Fragment() {
             onUserClick = { story -> /* Handle user click */ },
             onStoryClick = { story -> /* Handle story click */ },
             onPhotoClick = { photoUrl -> /* Handle photo click */ },
-            showBottomSheet = { photoUrl -> /* Handle show bottom sheet */ }
+            showBottomSheet = { photoUrl -> /* Handle show bottom sheet */ },
+            onMapsClick = { story -> /* Handle show bottom sheet */ }
+
         )
 
         recyclerView.adapter = bFeedAdapter

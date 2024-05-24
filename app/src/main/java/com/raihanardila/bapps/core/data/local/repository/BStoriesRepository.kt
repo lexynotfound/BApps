@@ -9,7 +9,12 @@ import retrofit2.Response
 class BStoriesRepository(
     private val apiService: ApiService
 ) {
-    suspend fun uploadImage(file: MultipartBody.Part, description: RequestBody, lat: RequestBody?, lon: RequestBody?): Response<ResponseBMaps> {
+    suspend fun uploadImage(
+        file: MultipartBody.Part,
+        description: RequestBody,
+        lat: RequestBody?,
+        lon: RequestBody?
+    ): Response<ResponseBMaps> {
         return apiService.uploadImage(file, description, lat, lon)
     }
 }

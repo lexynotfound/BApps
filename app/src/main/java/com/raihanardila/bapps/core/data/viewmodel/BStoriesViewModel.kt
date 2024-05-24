@@ -14,15 +14,25 @@ class BStoriesViewModel(
     private val repository: BStoriesRepository
 ) : ViewModel() {
 
-    fun uploadImage(file: MultipartBody.Part, description: RequestBody, lat: RequestBody?, lon: RequestBody?) : LiveData<ResponseBMaps> {
+    fun uploadImage(
+        file: MultipartBody.Part,
+        description: RequestBody,
+        lat: RequestBody?,
+        lon: RequestBody?
+    ): LiveData<ResponseBMaps> {
         val result = MutableLiveData<ResponseBMaps>()
         viewModelScope.launch {
-            try{
+            try {
                 val response = repository.uploadImage(file, description, lat, lon)
                 if (response.isSuccessful) {
                     result.postValue(response.body())
                 } else {
-                    result.postValue(ResponseBMaps(true, "Upload failed: ${response.errorBody()?.string()}"))
+                    result.postValue(
+                        ResponseBMaps(
+                            true,
+                            "Upload failed: ${response.errorBody()?.string()}"
+                        )
+                    )
                 }
             } catch (e: Exception) {
                 result.postValue(ResponseBMaps(true, "Upload failed: ${e.message}"))

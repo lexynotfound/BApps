@@ -41,10 +41,13 @@ class PasswordCustomeView(context: Context, attrs: AttributeSet) : LinearLayout(
     private fun updatePasswordVisibility() {
         if (isPasswordVisible) {
             passwordEditText.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            passwordInputLayout.endIconDrawable = ContextCompat.getDrawable(context, R.drawable.carbon_view_filled)
+            passwordInputLayout.endIconDrawable =
+                ContextCompat.getDrawable(context, R.drawable.carbon_view_filled)
         } else {
-            passwordEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            passwordInputLayout.endIconDrawable = ContextCompat.getDrawable(context, R.drawable.carbon_view_off_filled)
+            passwordEditText.inputType =
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            passwordInputLayout.endIconDrawable =
+                ContextCompat.getDrawable(context, R.drawable.carbon_view_off_filled)
         }
         passwordEditText.setSelection(passwordEditText.text?.length ?: 0)
     }
