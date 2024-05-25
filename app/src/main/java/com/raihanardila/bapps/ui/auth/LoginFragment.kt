@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -65,7 +66,6 @@ class LoginFragment : Fragment() {
             }
         })
 
-
         authViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
             progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         })
@@ -74,12 +74,18 @@ class LoginFragment : Fragment() {
             navigateToRegister()
         }
 
+        // Handle back navigation to exit the app
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireActivity().finishAffinity() // Exit the app
+                }
+            }
+        )
+
         return view
     }
-
-//    private fun saveAuthToken(token: String) {
-//        authPreferences.saveToken(token)
-//    }
 
     private fun navigateToHome() {
         findNavController().navigate(R.id.action_loginFragment_to_homeFragment)

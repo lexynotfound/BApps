@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -45,6 +46,16 @@ class HomeFragment : Fragment() {
         setupAdapter()
         setupSwipeToRefresh()
         observeViewModel() // Ensure this is called after setting up the adapter and other initializations
+
+        // Handle back navigation to exit the app
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireActivity().finishAffinity() // Exit the app
+                }
+            }
+        )
     }
 
     override fun onDestroyView() {
@@ -71,7 +82,6 @@ class HomeFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = bFeedAdapter
         }
-
     }
 
     private fun setupSwipeToRefresh() {

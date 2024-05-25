@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.raihanardila.bapps.R
 import com.raihanardila.bapps.core.data.local.prefrences.AuthPreferences
@@ -39,7 +40,10 @@ class SettingsFragment : Fragment() {
             progressBar.visibility = View.VISIBLE
             authPreferences.clearToken()
             progressBar.visibility = View.GONE
-            findNavController().navigate(R.id.action_settingsFragment_to_loginFragment)
+            findNavController().navigate(
+                R.id.action_settingsFragment_to_loginFragment, null,
+                NavOptions.Builder().setPopUpTo(R.id.nav_graph, true).build()
+            )
         }
 
         ivLogout.setOnClickListener(logoutListener)

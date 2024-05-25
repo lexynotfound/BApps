@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.raihanardila.bapps.core.data.local.prefrences.AuthPreferences
 import com.raihanardila.bapps.databinding.ActivityMainBinding
 import com.raihanardila.bapps.ui.home.HomeFragment
 import kotlinx.coroutines.launch
@@ -17,10 +18,9 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-
+    private lateinit var authPreferences: AuthPreferences
     private var lastClickTime = 0L
     private val doubleClickTimeDelta = 300L
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        authPreferences = AuthPreferences(this)
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.frame_container) as NavHostFragment
         navController = navHostFragment.navController
@@ -51,6 +52,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupBottomNavClickListener()
+
+        // Navigate to splash screen initially
+        if (savedInstanceState == null) {
+            navController.navigate(R.id.splashFragment)
+        }
     }
 
     private fun setupBottomNavClickListener() {
@@ -109,9 +115,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (navController.currentDestination?.id == R.id.homeFragment) {
-            // Handle the back press to minimize app if on the home screen
-            moveTaskToBack(true)
+        // Exit the application directly from HomeFragment or LoginFragment
+        if (navController.currentDestination?.id == R.id.homeFragment ||
+            navController.currentDestination?.id == R.id.loginFragment
+        ) {
+            finishAffinity()
         } else {
             super.onBackPressed()
         }

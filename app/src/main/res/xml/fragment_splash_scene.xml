@@ -4,14 +4,14 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        motion:constraintSetEnd="@+id/start"
-        motion:constraintSetStart="@+id/end"
-        motion:duration="1245"
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@+id/start"
+        motion:duration="1000"
         motion:autoTransition="animateToStart">
         <!-- Removed OnSwipe to use autoTransition -->
     </Transition>
 
-    <ConstraintSet android:id="@+id/start">
+    <ConstraintSet android:id="@+id/end">
         <Constraint
             android:id="@+id/imageView"
             android:layout_width="50dp"
@@ -21,10 +21,11 @@
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             android:scaleX="0.5"
-            android:scaleY="0.5" motion:transitionEasing="standard"/>
+            android:scaleY="0.5"
+            motion:transitionEasing="standard"/>
     </ConstraintSet>
 
-    <ConstraintSet android:id="@+id/end">
+    <ConstraintSet android:id="@+id/start">
         <Constraint
             android:id="@+id/imageView"
             android:layout_width="200dp"
